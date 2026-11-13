@@ -8,7 +8,14 @@ runtime/
 node_modules/
 playwright-report/
 test-results/
+evidence/playwright-report/
+evidence/test-results/
 evidence/demo-raw/
+evidence/video-recording/
+evidence/SourceLoop-demo-raw.webm
+evidence/demo-narration.wav
+evidence/demo-frame-*.png
+evidence/ui-desktop-draft.png
 release/
 .env
 .env.*

@@ -1,0 +1,31 @@
+test_correct_retry_resolves_the_same_review_item (test_api.ApiTests.test_correct_retry_resolves_the_same_review_item) ... ok
+test_export_downloads_a_standalone_study_pack (test_api.ApiTests.test_export_downloads_a_standalone_study_pack) ... ok
+test_health_reports_database_ready_with_security_headers (test_api.ApiTests.test_health_reports_database_ready_with_security_headers) ... ok
+test_import_persists_and_is_publicly_retrievable (test_api.ApiTests.test_import_persists_and_is_publicly_retrievable) ... ok
+test_invalid_content_type_is_rejected (test_api.ApiTests.test_invalid_content_type_is_rejected) ... ok
+test_missing_answers_fail_before_persisting_an_attempt (test_api.ApiTests.test_missing_answers_fail_before_persisting_an_attempt) ... ok
+test_public_pack_never_leaks_answers (test_api.ApiTests.test_public_pack_never_leaks_answers) ... ok
+test_static_path_traversal_is_blocked (test_api.ApiTests.test_static_path_traversal_is_blocked) ... ok
+test_unknown_route_returns_json_error (test_api.ApiTests.test_unknown_route_returns_json_error) ... ok
+test_wrong_attempt_creates_one_source_linked_review_item (test_api.ApiTests.test_wrong_attempt_creates_one_source_linked_review_item) ... ok
+test_every_question_points_to_a_real_source_and_option (test_content.CuratedContentTests.test_every_question_points_to_a_real_source_and_option) ... ok
+test_invalid_pack_is_rejected (test_content.CuratedContentTests.test_invalid_pack_is_rejected) ... ok
+test_lesson_citations_only_reference_existing_sources (test_content.CuratedContentTests.test_lesson_citations_only_reference_existing_sources) ... ok
+test_public_pack_removes_answers_and_explanations (test_content.CuratedContentTests.test_public_pack_removes_answers_and_explanations) ... ok
+test_builds_section_lessons_and_literal_quote_checks (test_content.MarkdownImportTests.test_builds_section_lessons_and_literal_quote_checks) ... ok
+test_empty_or_oversized_input_is_rejected (test_content.MarkdownImportTests.test_empty_or_oversized_input_is_rejected) ... ok
+test_import_keeps_html_shaped_text_as_plain_data (test_content.MarkdownImportTests.test_import_keeps_html_shaped_text_as_plain_data) ... ok
+test_one_section_remains_reading_only (test_content.MarkdownImportTests.test_one_section_remains_reading_only) ... ok
+test_embedded_json_cannot_close_the_script_element (test_export.OfflineExportTests.test_embedded_json_cannot_close_the_script_element) ... ok
+test_export_is_one_standalone_bilingual_document (test_export.OfflineExportTests.test_export_is_one_standalone_bilingual_document) ... ok
+test_exported_answer_key_round_trips (test_export.OfflineExportTests.test_exported_answer_key_round_trips) ... ok
+test_exposes_real_relaxations_for_the_ui (test_graph.ShortestPathTraceTests.test_exposes_real_relaxations_for_the_ui) ... ok
+test_finds_minimum_weight_route_not_fewest_edges (test_graph.ShortestPathTraceTests.test_finds_minimum_weight_route_not_fewest_edges) ... ok
+test_rejects_negative_weights_for_this_teaching_visual (test_graph.ShortestPathTraceTests.test_rejects_negative_weights_for_this_teaching_visual) ... ok
+test_reports_unreachable_goal_without_fabricating_a_path (test_graph.ShortestPathTraceTests.test_reports_unreachable_goal_without_fabricating_a_path) ... ok
+test_start_and_goal_may_be_the_same_node (test_graph.ShortestPathTraceTests.test_start_and_goal_may_be_the_same_node) ... ok
+
+----------------------------------------------------------------------
+Ran 26 tests in 0.854s
+
+OK

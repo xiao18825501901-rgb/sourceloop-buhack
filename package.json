@@ -1,0 +1,12 @@
+{
+  "name": "sourceloop-buhack",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Browser acceptance tests for the SourceLoop local study workspace.",
+  "scripts": {
+    "test:e2e": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/test-browser.ps1"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.65.0"
+  }
+}

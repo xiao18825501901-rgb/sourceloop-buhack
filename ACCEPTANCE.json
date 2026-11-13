@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "project": "SourceLoop",
+  "event": "BUHack 2.0",
+  "track": "Tertiary",
+  "theme": "EdTech",
+  "event_window_hkt": {
+    "start": "2026-11-13T10:00:00+08:00",
+    "end": "2026-11-15T10:00:00+08:00"
+  },
+  "generated_at_hkt": "2026-11-13T16:40:26+08:00",
+  "product": {
+    "status": "TESTED_LOCAL_AND_VERIFIED_BROWSER",
+    "local_run_command": "python -m sourceloop --host 127.0.0.1 --port 8765 --open",
+    "unit_and_integration_tests": {
+      "command": "python -m unittest discover -s tests -p \"test_*.py\" -v",
+      "result": "PASS",
+      "passed": 26,
+      "failed": 0,
+      "evidence": "evidence/TEST_RESULTS_UNIT.txt"
+    },
+    "browser_acceptance": {
+      "command": "npm run test:e2e",
+      "result": "PASS",
+      "passed": 3,
+      "failed": 0,
+      "evidence": "evidence/TEST_RESULTS_PLAYWRIGHT.txt"
+    },
+    "offline_export": {
+      "result": "PASS",
+      "operation": "downloaded export opened over file:// in an offline browser context",
+      "evidence": "evidence/ui-offline-file.png"
+    },
+    "responsive_layout": {
+      "result": "PASS",
+      "widths_checked": [1440, 390, 320],
+      "evidence": [
+        "evidence/ui-desktop-1440.png",
+        "evidence/ui-mobile-390.png",
+        "evidence/ui-mobile-320.png"
+      ]
+    },
+    "demo_video": {
+      "status": "TESTED_LOCAL",
+      "artifact": "evidence/SourceLoop-demo.mp4",
+      "note": "Captured from the live application; public upload requires an authenticated account."
+    }
+  },
+  "clean_room": {
+    "repository_created_after_event_start": true,
+    "pre_event_source_reused": false,
+    "pre_event_assets_reused": false,
+    "coursejesus_buhack_head": "ad54c96297602359da1dc60089cb0847cb451e4e",
+    "coursejesus_buhack_status": "clean at final isolation check",
+    "visual_quality_head": "1074b612db87c97c9caff09b5a32bcc5360d7de0",
+    "visual_quality_status": "pre-existing dirty state; SourceLoop did not write to it",
+    "evidence": [
+      "CLEAN_ROOM_RECORD.md",
+      "SOURCE_MAP.md",
+      "ISOLATION_REPORT.md"
+    ]
+  },
+  "release_checks": {
+    "public_repository": "PENDING_FINAL_PUSH_READBACK",
+    "secrets_and_private_paths": "PENDING_FINAL_SCAN",
+    "remote_readme_and_history": "PENDING_FINAL_READBACK",
+    "local_source_zip": "NOT_REQUIRED"
+  },
+  "external_submission": {
+    "team_eligibility": {
+      "status": "BLOCKED",
+      "reason": "Only one confirmed human team member; the event requires 2-5 members."
+    },
+    "mentormates": {
+      "status": "BLOCKED",
+      "reason": "Requires authenticated human team setup, final fields, and explicit submission confirmation."
+    },
+    "public_video": {
+      "status": "BLOCKED",
+      "reason": "Requires an authenticated YouTube/Vimeo/Youku account and human upload/visibility confirmation."
+    },
+    "devpost": {
+      "status": "NOT_APPLICABLE_TO_JUDGING",
+      "reason": "MentorMates is the official submission platform; Devpost is optional."
+    }
+  }
+}

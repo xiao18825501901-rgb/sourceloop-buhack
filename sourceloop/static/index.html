@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en" data-text-size="normal" data-reduced-motion="false">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#f2ede2">
+  <meta name="description" content="SourceLoop turns course notes into a cited, interactive study loop.">
+  <title>SourceLoop · Cited study workspace</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/app.css">
+  <script src="/assets/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to lesson</a>
+
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="SourceLoop home">
+      <span class="brand-mark" aria-hidden="true">S</span>
+      <span class="brand-copy">
+        <strong>SourceLoop</strong>
+        <small>Cited study loops · local first</small>
+      </span>
+    </a>
+
+    <div class="topbar-context">
+      <span class="status-dot" aria-hidden="true"></span>
+      <span id="privacy-label">Private workspace</span>
+      <span class="context-separator" aria-hidden="true"></span>
+      <span id="no-model-label">No cloud model</span>
+    </div>
+
+    <div class="topbar-actions" aria-label="Study preferences">
+      <button class="tool-button" id="lang-button" type="button" aria-label="Switch language">
+        <span class="tool-symbol" aria-hidden="true">文</span>
+        <span class="tool-label" id="lang-label">中文</span>
+      </button>
+      <button class="tool-button" id="text-button" type="button" aria-label="Use larger text" aria-pressed="false">
+        <span class="tool-symbol text-symbol" aria-hidden="true">A+</span>
+        <span class="tool-label">Larger text</span>
+      </button>
+      <button class="tool-button" id="motion-button" type="button" aria-label="Reduce motion" aria-pressed="false">
+        <span class="tool-symbol" aria-hidden="true">≈</span>
+        <span class="tool-label">Reduce motion</span>
+      </button>
+      <button class="export-button" id="export-button" type="button">
+        <svg width="17" height="17" viewBox="0 0 20 20" aria-hidden="true">
+          <path d="M10 2v10m0 0 4-4m-4 4L6 8M3 13v4h14v-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>Export offline</span>
+      </button>
+      <button class="icon-button" id="import-open" type="button" aria-label="Import your notes" title="Import notes">
+        <svg width="19" height="19" viewBox="0 0 20 20" aria-hidden="true">
+          <path d="M10 13V3m0 0L6 7m4-4 4 4M3 12v5h14v-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="loading-screen" id="loading-screen" role="status" aria-live="polite">
+    <div class="loading-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+    <p>Opening your local study desk…</p>
+    <small>Reading course data and checking the workspace database.</small>
+  </div>
+
+  <div class="fatal-screen" id="error-screen" hidden>
+    <p class="eyebrow">Local workspace unavailable</p>
+    <h1>The study desk could not open.</h1>
+    <p id="error-message">The local server did not return a usable response.</p>
+    <button class="primary-button" id="retry-load" type="button">Try again</button>
+  </div>
+
+  <div class="workspace" id="app-shell" hidden>
+    <aside class="lesson-rail" aria-label="Course navigation">
+      <div class="rail-heading">
+        <p class="micro-label" id="pack-label">Study pack</p>
+        <label class="visually-hidden" for="pack-select">Choose a study pack</label>
+        <select id="pack-select" class="pack-select"></select>
+      </div>
+      <div class="rail-divider"></div>
+      <div class="rail-heading rail-heading-row">
+        <p class="micro-label" id="course-map-label">Course map</p>
+        <span class="progress-label" id="course-progress"></span>
+      </div>
+      <nav class="lesson-list" id="lesson-list" aria-label="Lessons"></nav>
+      <div class="rail-divider"></div>
+      <button class="import-card" id="import-card" type="button">
+        <span class="import-plus" aria-hidden="true">+</span>
+        <span>
+          <strong id="import-card-title">Bring your own notes</strong>
+          <small id="import-card-subtitle">Markdown or text · stays local</small>
+        </span>
+      </button>
+    </aside>
+
+    <main class="study-column" id="main-content">
+      <div id="lesson-view">
+        <div class="lesson-skeleton" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </main>
+
+    <aside class="review-rail" aria-labelledby="review-heading">
+      <div class="review-head">
+        <div>
+          <p class="micro-label">Learning loop</p>
+          <h2 id="review-heading">Review queue</h2>
+        </div>
+        <span class="review-count" id="review-count" aria-label="Open review items">0</span>
+      </div>
+      <p class="review-intro" id="review-intro">Missed checks land here with the exact source you need.</p>
+      <div class="review-list" id="review-list" aria-live="polite"></div>
+      <div class="review-empty" id="review-empty" hidden>
+        <span class="review-empty-mark" aria-hidden="true">✓</span>
+        <strong id="review-empty-title">No open loops</strong>
+        <p id="review-empty-body">Miss a check and it will return here with its source.</p>
+      </div>
+      <div class="method-note">
+        <span class="method-index">01</span>
+        <p id="method-read"><strong>Read.</strong> Every taught idea points back to an exact passage.</p>
+        <span class="method-index">02</span>
+        <p id="method-test"><strong>Test.</strong> The local server grades objective checks.</p>
+        <span class="method-index">03</span>
+        <p id="method-return"><strong>Return.</strong> A missed check becomes one source-linked review item.</p>
+      </div>
+      <button class="review-import" id="review-import" type="button">Import another note pack</button>
+    </aside>
+  </div>
+
+  <dialog class="import-dialog" id="import-dialog" aria-labelledby="import-heading">
+    <form id="import-form" novalidate>
+      <div class="dialog-head">
+        <div>
+          <p class="eyebrow" id="import-eyebrow">Local import</p>
+          <h2 id="import-heading">Turn your notes into a study loop.</h2>
+        </div>
+        <button class="icon-button dialog-close" id="import-close" type="button" aria-label="Close import dialog">
+          <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
+            <path d="m4 4 10 10M14 4 4 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+      <p class="dialog-intro" id="import-intro">
+        SourceLoop keeps your text as the source of truth. It creates literal quote and
+        source-location checks rather than inventing explanations.
+      </p>
+      <div class="dialog-grid">
+        <div class="field-group">
+          <label for="import-title" id="import-title-label">Pack title</label>
+          <input id="import-title" name="title" type="text" maxlength="100" placeholder="e.g. Memory & Retrieval">
+        </div>
+        <div class="field-group file-field">
+          <label for="import-file" id="import-file-label">Choose a .md or .txt file</label>
+          <input id="import-file" name="file" type="file" accept=".md,.markdown,.txt,text/plain,text/markdown">
+        </div>
+      </div>
+      <div class="field-group">
+        <label for="import-text" id="import-text-label">Or paste your notes</label>
+        <textarea id="import-text" name="text" rows="12" maxlength="150000" placeholder="# First section&#10;&#10;Paste at least two headed sections…"></textarea>
+        <div class="field-meta">
+          <span id="import-help">Use two or more Markdown headings for quote checks.</span>
+          <span id="import-size">0 / 150,000</span>
+        </div>
+      </div>
+      <div class="dialog-status" id="import-status" role="alert"></div>
+      <div class="dialog-actions">
+        <button class="secondary-button" id="import-cancel" type="button">Cancel</button>
+        <button class="primary-button" id="import-submit" type="submit">Build local study pack</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+  <noscript>
+    <p class="noscript-message">SourceLoop needs JavaScript enabled for the interactive study workspace.</p>
+  </noscript>
+</body>
+</html>
