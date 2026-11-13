@@ -33,6 +33,8 @@ Coverage includes:
 
 The full readable output is saved at `evidence/TEST_RESULTS_UNIT.txt`.
 
+The exported HTML was additionally inspected for `localhost`, `127.0.0.1`, private/production service URLs, and private workspace paths. The only HTTP namespace present is the standard SVG XML namespace; the exported study pack makes no network request.
+
 ## 2026-11-13 16:40 HKT — Browser acceptance
 
 Command:

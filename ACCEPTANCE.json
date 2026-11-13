@@ -29,7 +29,11 @@
     "offline_export": {
       "result": "PASS",
       "operation": "downloaded export opened over file:// in an offline browser context",
-      "evidence": "evidence/ui-offline-file.png"
+      "url_and_private_path_scan": "PASS",
+      "evidence": [
+        "evidence/ui-offline-file.png",
+        "tests/test_export.py"
+      ]
     },
     "responsive_layout": {
       "result": "PASS",
