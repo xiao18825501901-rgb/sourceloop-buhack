@@ -1,0 +1,710 @@
+{
+  "schema_version": 1,
+  "id": "campus-routes",
+  "origin": "curated",
+  "title": {
+    "en": "Campus Routes Lab",
+    "zh": "校园路线实验室"
+  },
+  "subtitle": {
+    "en": "A three-stop micro-course in weighted graphs and shortest paths.",
+    "zh": "用三节微课读懂加权图与最短路径。"
+  },
+  "description": {
+    "en": "Read the map, test Dijkstra's frontier, and learn the assumption that keeps the shortcut honest.",
+    "zh": "先读懂地图，再观察 Dijkstra 的边界，最后看清让这条捷径成立的假设。"
+  },
+  "discipline": {
+    "en": "Computer science · Algorithms",
+    "zh": "计算机科学 · 算法"
+  },
+  "authors": "SourceLoop team",
+  "license": "MIT",
+  "sources": [
+    {
+      "code": "S1",
+      "label": {
+        "en": "Open notes 03 · §1",
+        "zh": "开放讲义 03 · 第1节"
+      },
+      "title": {
+        "en": "What an edge weight means",
+        "zh": "边的权重意味着什么"
+      },
+      "text": {
+        "en": "A weighted graph is a set of places, called vertices, joined by links called edges. Each edge carries a number called a weight. On a campus map, that number may be walking time, distance, cost, or delay. The graph is only a model: the weight has meaning because the mapmaker defines its unit.",
+        "zh": "加权图由地点（顶点）和连接它们的路线（边）组成。每条边带有一个数字，称为权重。在校园地图中，这个数字可以是步行时间、距离、费用或延误。图只是一个模型：权重只有在制图者说明单位时才有意义。"
+      }
+    },
+    {
+      "code": "S2",
+      "label": {
+        "en": "Open notes 03 · §2",
+        "zh": "开放讲义 03 · 第2节"
+      },
+      "title": {
+        "en": "Comparing whole routes",
+        "zh": "比较完整路线"
+      },
+      "text": {
+        "en": "Route length is not counted by the number of edges. A route with two links can cost more than a route with four. To compare routes, add the weights of every edge on the route. The cheapest route is the one with the smallest total weight, not the fewest stops.",
+        "zh": "路线长度不能按边的数量来计算。一条只有两条边的路线，可能比有四条边的路线成本更高。比较路线时，应把沿途每条边的权重相加。最便宜的路线是总权重最小的路线，而不是站点最少的路线。"
+      }
+    },
+    {
+      "code": "S3",
+      "label": {
+        "en": "Open notes 03 · §3",
+        "zh": "开放讲义 03 · 第3节"
+      },
+      "title": {
+        "en": "The frontier invariant",
+        "zh": "边界的核心不变量"
+      },
+      "text": {
+        "en": "Dijkstra grows a verified region outward from the start. On each turn it finalizes the unsettled vertex with the smallest known distance. Because every edge weight is non-negative, no later detour can make a settled distance smaller. The algorithm only relaxes edges that leave the newly settled vertex.",
+        "zh": "Dijkstra 从起点向外扩展一片“已确认区域”。每一轮，它在尚未确认的顶点中选择当前已知距离最小的一个。因为所有边的权重都非负，之后出现的任何绕路都不可能让已确认的距离更小。算法只需要松弛从新确认顶点出发的边。"
+      }
+    },
+    {
+      "code": "S4",
+      "label": {
+        "en": "Open notes 03 · §4",
+        "zh": "开放讲义 03 · 第4节"
+      },
+      "title": {
+        "en": "Relaxation leaves a trail",
+        "zh": "松弛会留下轨迹"
+      },
+      "text": {
+        "en": "Relaxing an edge is a comparison, not a guess. If the settled distance plus the edge weight is smaller than the best distance currently recorded for the neighbor, replace that record and note the predecessor that produced it. The predecessor chain, followed backward from the destination, is the shortest path.",
+        "zh": "松弛一条边是在做比较，不是猜测。如果“已确认顶点的距离 + 边的权重”小于邻居当前的暂定距离，就更新这个距离，并记录产生它的前驱。从终点沿着前驱链倒推，就得到最短路径。"
+      }
+    },
+    {
+      "code": "S5",
+      "label": {
+        "en": "Open notes 03 · §5",
+        "zh": "开放讲义 03 · 第5节"
+      },
+      "title": {
+        "en": "The non-negative assumption",
+        "zh": "非负权重假设"
+      },
+      "text": {
+        "en": "Non-negative weights are the license for Dijkstra's shortcut. If an edge can subtract value, a short expensive-looking prefix might later be outweighed by a negative edge. A negative cycle is worse: every lap lowers the total, so no cheapest route exists. Bellman-Ford-style methods revisit edges instead of permanently settling one vertex at a time.",
+        "zh": "非负权重是 Dijkstra 可以“抄近路”的许可证。如果一条边能减掉价值，一个看似昂贵的前缀，可能后来被负边抵消。负环更糟：每绕一圈，总成本都会继续下降，因此不存在最小的有限路线。Bellman-Ford 一类方法会反复检查边，而不是一次永久确认一个顶点。"
+      }
+    }
+  ],
+  "lessons": [
+    {
+      "id": "read-the-network",
+      "kicker": {
+        "en": "01 · Foundations",
+        "zh": "01 · 基础"
+      },
+      "title": {
+        "en": "Read before you run",
+        "zh": "先读懂，再计算"
+      },
+      "summary": {
+        "en": "Learn what vertices, edges, and weights mean, and why the cost of a route is a sum.",
+        "zh": "理解顶点、边和权重的含义，以及为什么路线成本必须相加。"
+      },
+      "duration": {
+        "en": "6 min",
+        "zh": "6 分钟"
+      },
+      "body": [
+        {
+          "kind": "lead",
+          "text": {
+            "en": "A route is not a list of stops. It is a claim about cost.",
+            "zh": "一条路线不是一串站名，而是一份成本声明。"
+          },
+          "source": "S1"
+        },
+        {
+          "kind": "paragraph",
+          "text": {
+            "en": "In a weighted graph, every edge uses one declared unit: minutes, metres, money, or delay. The unit is not decoration; it is what makes the numbers comparable and addable. The drawing is not the distance either. Two nodes can look close while the edge between them says twelve.",
+            "zh": "在加权图中，每条边都使用一套明确单位：分钟、米、金额或延误。单位不是装饰，它决定这些数字能否比较、能否相加。图中的位置也不等于距离：两个节点画得再近，只要边上写着 12，它们的连接成本就是 12。"
+          },
+          "source": "S1"
+        },
+        {
+          "kind": "callout",
+          "title": {
+            "en": "Do the arithmetic",
+            "zh": "真正要做的是加法"
+          },
+          "text": {
+            "en": "A two-edge detour can beat a single direct edge. Compare routes by adding weights, not by counting arrows.",
+            "zh": "两段边可能比一段直达边更便宜。比较路线时要把权重相加，而不是数箭头。"
+          },
+          "source": "S2"
+        }
+      ],
+      "questions": [
+        {
+          "id": "cost-sum",
+          "prompt": {
+            "en": "Route A uses edges weighted 4 and 3. Route B uses edges weighted 2, 2, and 2. Which route has the lower total cost?",
+            "zh": "路线 A 依次经过权重为 4 和 3 的两条边；路线 B 依次经过权重为 2、2、2 的三条边。哪条路线的总成本更低？"
+          },
+          "options": [
+            {
+              "id": "a",
+              "text": {
+                "en": "Route A, because it has fewer stops",
+                "zh": "路线 A，因为停靠更少"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "Route B, because 2 + 2 + 2 is less than 4 + 3",
+                "zh": "路线 B，因为 2 + 2 + 2 小于 4 + 3"
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "They tie, because both routes reach the same place",
+                "zh": "两者相同，因为终点一样"
+              }
+            }
+          ],
+          "answer": "b",
+          "explanation": {
+            "en": "Route B costs 6 while Route A costs 7. Dijkstra compares sums of weights, not the number of edges.",
+            "zh": "路线 B 的总成本是 6，路线 A 是 7。Dijkstra 比较的是权重之和，而不是边的数量。"
+          },
+          "source": "S2",
+          "concept": {
+            "en": "Path cost is a sum",
+            "zh": "路径成本是权重之和"
+          }
+        },
+        {
+          "id": "weight-unit",
+          "prompt": {
+            "en": "An edge is labeled 8. What does that number represent?",
+            "zh": "一条边标记为 8。这个数字代表什么？"
+          },
+          "options": [
+            {
+              "id": "a",
+              "text": {
+                "en": "The algorithm has visited eight nodes",
+                "zh": "算法已经访问了八个节点"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "The segment costs 8 in the unit chosen by the mapmaker",
+                "zh": "该路段在制图者规定的单位下成本为 8"
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "There are eight alternative routes",
+                "zh": "共有八条替代路线"
+              }
+            }
+          ],
+          "answer": "b",
+          "explanation": {
+            "en": "An edge weight is a defined cost for that link. Its meaning depends on the unit declared by the mapmaker.",
+            "zh": "边的权重是这条连接所定义的成本。它的含义取决于制图者声明的单位。"
+          },
+          "source": "S1",
+          "concept": {
+            "en": "Weights are unit-bearing costs",
+            "zh": "权重是带单位的成本"
+          }
+        },
+        {
+          "id": "fewest-stops",
+          "prompt": {
+            "en": "True or false: the route with the fewest stops always has the smallest total travel time.",
+            "zh": "判断：停靠站最少的路线，总是总旅行时间最短的路线。"
+          },
+          "options": [
+            {
+              "id": "a",
+              "text": {
+                "en": "True",
+                "zh": "正确"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "False",
+                "zh": "错误"
+              }
+            }
+          ],
+          "answer": "b",
+          "explanation": {
+            "en": "The cheapest route has the smallest total weight. A route with more links can still have a lower sum.",
+            "zh": "最便宜的路线是总权重最小的路线。边更多的路线仍然可能有更小的总和。"
+          },
+          "source": "S2",
+          "concept": {
+            "en": "Edge count is not path cost",
+            "zh": "边的数量不等于路径成本"
+          }
+        }
+      ]
+    },
+    {
+      "id": "dijkstra-frontier",
+      "kicker": {
+        "en": "02 · Interactive",
+        "zh": "02 · 交互"
+      },
+      "title": {
+        "en": "The frontier tells the truth",
+        "zh": "边界为什么可信"
+      },
+      "summary": {
+        "en": "Step a real Dijkstra computation and watch settled distances, relaxations, and the final route change.",
+        "zh": "亲手推进一次真实的 Dijkstra 计算，观察已确认距离、松弛和最终路线如何变化。"
+      },
+      "duration": {
+        "en": "8 min",
+        "zh": "8 分钟"
+      },
+      "body": [
+        {
+          "kind": "lead",
+          "text": {
+            "en": "Dijkstra looks cautious because it refuses to guess. That caution is what makes the answer auditable.",
+            "zh": "Dijkstra 看起来很谨慎，因为它拒绝猜测。正是这种谨慎让答案可以被检查。"
+          },
+          "source": "S3"
+        },
+        {
+          "kind": "paragraph",
+          "text": {
+            "en": "The algorithm keeps a tentative distance for every node and grows outward from the start. On each turn it confirms the unsettled node with the smallest tentative distance. With non-negative weights, any future detour can only add cost, so it cannot undercut a distance that has already been confirmed.",
+            "zh": "算法为每个节点保留暂定距离，并从起点向外扩展。每一轮，它确认尚未确认节点中暂定距离最小的一个。在所有边权重非负时，任何未来的绕路都只会增加成本，因此不可能推翻一个已被确认的距离。"
+          },
+          "source": "S3"
+        },
+        {
+          "kind": "callout",
+          "title": {
+            "en": "A settled node is not “near”",
+            "zh": "“已确认”不等于“看起来近”"
+          },
+          "text": {
+            "en": "It is the node with the smallest known total cost among the unsettled set. The reason is the invariant, not the drawing.",
+            "zh": "它代表尚未确认的节点中，当前已知总成本最小的一个。理由是算法不变量，而不是图上的视觉距离。"
+          },
+          "source": "S3"
+        },
+        {
+          "kind": "paragraph",
+          "text": {
+            "en": "Relaxation is where an improved route enters the record. The algorithm compares the current best distance with a new candidate and updates a predecessor only when the candidate is smaller. Following predecessors backward from the destination reconstructs the path.",
+            "zh": "优化后的路线通过“松弛”进入记录。算法把当前最好距离与新的候选值进行比较，只有在候选值更小时才更新前驱。从终点沿前驱倒推，就能重建路径。"
+          },
+          "source": "S4"
+        }
+      ],
+      "visual": {
+        "type": "dijkstra",
+        "start": "LIB",
+        "goal": "LAB",
+        "nodes": [
+          {
+            "id": "LIB",
+            "label": {
+              "en": "Library",
+              "zh": "图书馆"
+            },
+            "x": 82,
+            "y": 202
+          },
+          {
+            "id": "STA",
+            "label": {
+              "en": "Station",
+              "zh": "车站"
+            },
+            "x": 266,
+            "y": 78
+          },
+          {
+            "id": "CAN",
+            "label": {
+              "en": "Canteen",
+              "zh": "食堂"
+            },
+            "x": 286,
+            "y": 314
+          },
+          {
+            "id": "LAB",
+            "label": {
+              "en": "Lab",
+              "zh": "实验室"
+            },
+            "x": 566,
+            "y": 190
+          },
+          {
+            "id": "HALL",
+            "label": {
+              "en": "Hall",
+              "zh": "宿舍"
+            },
+            "x": 548,
+            "y": 350
+          }
+        ],
+        "edges": [
+          {
+            "from": "LIB",
+            "to": "STA",
+            "weight": 4
+          },
+          {
+            "from": "LIB",
+            "to": "CAN",
+            "weight": 2
+          },
+          {
+            "from": "STA",
+            "to": "CAN",
+            "weight": 1
+          },
+          {
+            "from": "STA",
+            "to": "LAB",
+            "weight": 8
+          },
+          {
+            "from": "STA",
+            "to": "HALL",
+            "weight": 9
+          },
+          {
+            "from": "CAN",
+            "to": "LAB",
+            "weight": 7
+          },
+          {
+            "from": "CAN",
+            "to": "HALL",
+            "weight": 6
+          },
+          {
+            "from": "LAB",
+            "to": "HALL",
+            "weight": 2
+          }
+        ]
+      },
+      "questions": [
+        {
+          "id": "next-node",
+          "prompt": {
+            "en": "During Dijkstra, which unsettled node is confirmed next?",
+            "zh": "在 Dijkstra 中，下一个被确认的是哪个尚未确认的节点？"
+          },
+          "options": [
+            {
+              "id": "a",
+              "text": {
+                "en": "The one with the smallest tentative distance",
+                "zh": "暂定距离最小的节点"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "The one with the most outgoing edges",
+                "zh": "出边最多的节点"
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "The one drawn closest to the destination",
+                "zh": "在图上离终点最近的节点"
+              }
+            }
+          ],
+          "answer": "a",
+          "explanation": {
+            "en": "Each turn finalizes the unsettled vertex with the smallest known distance. The drawing does not decide the order.",
+            "zh": "每一轮都会确认尚未确认的节点中当前已知距离最小的一个。图上的位置不决定顺序。"
+          },
+          "source": "S3",
+          "concept": {
+            "en": "Dijkstra selects the smallest frontier",
+            "zh": "Dijkstra 选择最小的边界距离"
+          }
+        },
+        {
+          "id": "settled-safety",
+          "prompt": {
+            "en": "Why can a confirmed distance be trusted when all weights are non-negative?",
+            "zh": "当所有边权重都非负时，为什么一个已确认距离可以信任？"
+          },
+          "options": [
+            {
+              "id": "a",
+              "text": {
+                "en": "Because a confirmed node can never be reached again",
+                "zh": "因为已确认节点之后永远不会再被到达"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "Because later paths can only add or preserve cost",
+                "zh": "因为之后的路径只会增加或保持成本"
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "Because every edge has the same weight",
+                "zh": "因为每条边的权重都相同"
+              }
+            }
+          ],
+          "answer": "b",
+          "explanation": {
+            "en": "Non-negative edge weights mean a future detour cannot subtract cost, so it cannot produce a smaller distance than the confirmed minimum.",
+            "zh": "非负边权重意味着未来的绕路不能减去成本，因此不可能产生比已确认最小值更小的距离。"
+          },
+          "source": "S3",
+          "concept": {
+            "en": "Non-negative weights protect settled nodes",
+            "zh": "非负权重保护已确认节点"
+          }
+        },
+        {
+          "id": "relaxation",
+          "prompt": {
+            "en": "What does relaxing edge u → v do?",
+            "zh": "松弛边 u → v 实际上做了什么？"
+          },
+          "options": [
+            {
+              "id": "a",
+              "text": {
+                "en": "It deletes v from the graph",
+                "zh": "从图中删除节点 v"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "It chooses a random nearest node",
+                "zh": "随机选择最近的节点"
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "It compares dist[u] + weight(u, v) with dist[v] and may lower dist[v]",
+                "zh": "比较 dist[u] + weight(u, v) 与 dist[v]，并可能降低 dist[v]"
+              }
+            }
+          ],
+          "answer": "c",
+          "explanation": {
+            "en": "Relaxation is a comparison. If the new candidate is smaller, the distance and predecessor are updated.",
+            "zh": "松弛是一种比较。如果新的候选值更小，就更新距离和前驱。"
+          },
+          "source": "S4",
+          "concept": {
+            "en": "Relaxation updates by comparison",
+            "zh": "松弛通过比较完成更新"
+          }
+        }
+      ]
+    },
+    {
+      "id": "assumption-check",
+      "kicker": {
+        "en": "03 · Limits",
+        "zh": "03 · 限制"
+      },
+      "title": {
+        "en": "Know when the shortcut fails",
+        "zh": "知道捷径何时失效"
+      },
+      "summary": {
+        "en": "See why Dijkstra needs non-negative weights and what a negative cycle does to the question.",
+        "zh": "理解为什么 Dijkstra 需要非负权重，以及负环会怎样改变问题本身。"
+      },
+      "duration": {
+        "en": "5 min",
+        "zh": "5 分钟"
+      },
+      "body": [
+        {
+          "kind": "lead",
+          "text": {
+            "en": "Every shortcut has a fine-print clause.",
+            "zh": "每条捷径都有一行需要认真阅读的小字。"
+          },
+          "source": "S5"
+        },
+        {
+          "kind": "paragraph",
+          "text": {
+            "en": "Dijkstra's proof depends on non-negative edge weights. If an edge can subtract value, a node that looked safely settled may later receive a cheaper route through that negative edge. The algorithm's promise no longer holds.",
+            "zh": "Dijkstra 的正确性证明依赖非负边权重。如果一条边可以减去价值，一个看似已经安全确认的节点，之后可能通过这条负边获得更便宜的路线。算法的承诺就不再生效。"
+          },
+          "source": "S5"
+        },
+        {
+          "kind": "callout",
+          "title": {
+            "en": "A negative cycle changes the question",
+            "zh": "负环改变了问题本身"
+          },
+          "text": {
+            "en": "Every lap lowers the total, so there is no finite cheapest route. Bellman-Ford-style methods revisit edges instead of permanently settling each node once.",
+            "zh": "每绕一圈总成本都会下降，因此不存在有限的最便宜路线。Bellman-Ford 一类方法会反复检查边，而不是把每个节点永久确认一次。"
+          },
+          "source": "S5"
+        }
+      ],
+      "questions": [
+        {
+          "id": "valid-weights",
+          "prompt": {
+            "en": "Which condition is Dijkstra's key non-negative shortcut built on?",
+            "zh": "Dijkstra 的这条非负捷径依赖哪个条件？"
+          },
+          "options": [
+            {
+              "id": "a",
+              "text": {
+                "en": "The graph must be a tree",
+                "zh": "图必须是一棵树"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "No edge may have a negative weight",
+                "zh": "任何边的权重都不能为负"
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "Every node must have the same degree",
+                "zh": "每个节点的度数必须相同"
+              }
+            }
+          ],
+          "answer": "b",
+          "explanation": {
+            "en": "The invariant needs non-negative weights. Tree shape and equal degree are not the requirement.",
+            "zh": "这个不变量需要非负权重。树的形状或相同度数都不是前提。"
+          },
+          "source": "S5",
+          "concept": {
+            "en": "Dijkstra requires non-negative weights",
+            "zh": "Dijkstra 要求非负权重"
+          }
+        },
+        {
+          "id": "negative-cycle",
+          "prompt": {
+            "en": "Why can a negative cycle break shortest-path search?",
+            "zh": "为什么负环会破坏最短路径搜索？"
+          },
+          "options": [
+            {
+              "id": "a",
+              "text": {
+                "en": "Each lap lowers the total, so no finite minimum exists",
+                "zh": "每绕一圈总成本都会下降，因此不存在有限最小值"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "Every cycle increases the total weight",
+                "zh": "每个环都会增加总权重"
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "It turns the graph into an unweighted graph",
+                "zh": "它把图变成无权图"
+              }
+            }
+          ],
+          "answer": "a",
+          "explanation": {
+            "en": "Repeating a negative cycle keeps reducing the total. There is no finite route that could be called the minimum.",
+            "zh": "重复经过负环会不断降低总成本。因此不存在可称为最小值的有限路线。"
+          },
+          "source": "S5",
+          "concept": {
+            "en": "Negative cycles remove a finite minimum",
+            "zh": "负环使有限最小值不存在"
+          }
+        },
+        {
+          "id": "bellman-ford",
+          "prompt": {
+            "en": "What do Bellman-Ford-style methods do differently?",
+            "zh": "Bellman-Ford 一类方法的做法有何不同？"
+          },
+          "options": [
+            {
+              "id": "a",
+              "text": {
+                "en": "They ignore edge weights completely",
+                "zh": "完全忽略边权重"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "They only work on trees",
+                "zh": "只适用于树"
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "They revisit edges instead of permanently settling each node once",
+                "zh": "反复检查边，而不是把每个节点永久确认一次"
+              }
+            }
+          ],
+          "answer": "c",
+          "explanation": {
+            "en": "Revisiting edges allows later negative improvements to be discovered. Dijkstra's permanent settlement is what becomes unsafe.",
+            "zh": "反复检查边可以发现后来的负向改进。变得不安全的是 Dijkstra 的永久确认操作。"
+          },
+          "source": "S5",
+          "concept": {
+            "en": "Bellman-Ford revisits edges",
+            "zh": "Bellman-Ford 反复检查边"
+          }
+        }
+      ]
+    }
+  ]
+}
