@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+*.sqlite
+*.sqlite3
+
+runtime/
+.test-runtime/
+node_modules/
+playwright-report/
+test-results/
+evidence/demo-raw/
+release/
+.env
+.env.*
+*.pem
+*.key
+
